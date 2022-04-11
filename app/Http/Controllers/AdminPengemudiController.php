@@ -14,18 +14,19 @@
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
-			$this->button_table_action = true;
+			$this->button_table_action = false;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
 			$this->button_edit = true;
-			$this->button_delete = true;
-			$this->button_detail = true;
+			$this->button_delete = false;
+			$this->button_detail = false;
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
 			$this->table = "pengemudi";
+			$this->data_kendaraan = [];
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
@@ -42,28 +43,30 @@
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-3','placeholder'=>'Anda hanya dapat memasukkan huruf saja'];
-			$this->form[] = ['label'=>'Alamat','name'=>'alamat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
-			$this->form[] = ['label'=>'Kota','name'=>'kota','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			$this->form[] = ['label'=>'Telepon','name'=>'telepon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
-			$this->form[] = ['label'=>'KTP','name'=>'ktp','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
-			$this->form[] = ['label'=>'SIM','name'=>'sim','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
-			$this->form[] = ['label'=>'Penanda','name'=>'penanda','type'=>'checkbox','width'=>'col-sm-3','dataenum'=>'blacklist'];
-			$this->form[] = ['label'=>'Catatan','name'=>'catatan','type'=>'text','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Nomor Kendaraan','name'=>'nomor','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Keterangan Kendaraan','name'=>'keterangan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Nama Pengemudi','name'=>'nm_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Alamat Pengemudi','name'=>'alamat_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Kota Pengemudi','name'=>'kota_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Telepon','name'=>'tlp_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'KTP Pengemudi','name'=>'ktp_pengemudi','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'SIM Pengemudi','name'=>'sim_pengemudi','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Foto Pengemudi','name'=>'foto','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-3','placeholder'=>'Anda hanya dapat memasukkan huruf saja'];
-			//$this->form[] = ['label'=>'Alamat','name'=>'alamat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
-			//$this->form[] = ['label'=>'Kota','name'=>'kota','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			//$this->form[] = ['label'=>'Telepon','name'=>'telepon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
-			//$this->form[] = ['label'=>'KTP','name'=>'ktp','type'=>'upload','validation'=>'required','width'=>'col-sm-3','dataenum'=>'blacklist'];
-			//$this->form[] = ['label'=>'SIM','name'=>'sim','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
-			//$this->form[] = ['label'=>'Penanda','name'=>'penanda','type'=>'checkbox','validation'=>'min:1|max:255','width'=>'col-sm-3'];
-			//$this->form[] = ['label'=>'Catatan','name'=>'catatan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-5'];
+			//$this->form[] = ['label'=>'Nomor Kendaraan','name'=>'nomor','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			//$this->form[] = ['label'=>'Keterangan Kendaraan','name'=>'keterangan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+			//$this->form[] = ['label'=>'Nama Pengemudi','name'=>'nm_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-3'];
+			//$this->form[] = ['label'=>'Alamat Pengemudi','name'=>'alamat_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-5'];
+			//$this->form[] = ['label'=>'Kota Pengemudi','name'=>'kota_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-3'];
+			//$this->form[] = ['label'=>'Telepon','name'=>'tlp_pengemudi','type'=>'text','validation'=>'required','width'=>'col-sm-3'];
+			//$this->form[] = ['label'=>'KTP Pengemudi','name'=>'ktp_pengemudi','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
+			//$this->form[] = ['label'=>'SIM Pengemudi','name'=>'sim_pengemudi','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
 			# OLD END FORM
 
+			
 			/* 
 	        | ---------------------------------------------------------------------- 
 	        | Sub Module
@@ -260,6 +263,16 @@
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
+			if($column_index==0){
+				$cel_rm = str_replace("<input type='checkbox' class='checkbox' name='checkbox[]' value='",'', $column_value);
+				$cel_rm = str_replace("'/>",'',$cel_rm);
+				$this->selected_pk = $cel_rm;
+			}
+
+			if($column_index==1){
+				// print($cel_rm)."--->";
+				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/default_pengemudi/edit/'.$this->selected_pk.'">'.$column_value.'</a>';
+			}
 	    }
 
 	    /*
@@ -272,6 +285,30 @@
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
 
+
+			$postdata['nama'] = $postdata['nm_pengemudi'];
+			$postdata['alamat'] = $postdata['alamat_pengemudi'];
+			$postdata['kota'] = $postdata['kota_pengemudi'];
+			$postdata['telepon'] = $postdata['tlp_pengemudi'];
+			$postdata['ktp'] = $postdata['ktp_pengemudi'];
+			$postdata['sim'] = $postdata['sim_pengemudi'];
+			$postdata['penanda'] = "";
+			$postdata['catatan'] = "";
+
+			unset($postdata['nm_pengemudi']);
+			unset($postdata['alamat_pengemudi']);
+			unset($postdata['kota_pengemudi']);
+			unset($postdata['tlp_pengemudi']);
+			unset($postdata['ktp_pengemudi']);
+			unset($postdata['sim_pengemudi']);
+
+			$this->data_kendaraan['nomor'] = $postdata['nomor'];
+			$this->data_kendaraan['keterangan'] = $postdata['keterangan'];
+			unset($postdata['nomor']);
+			unset($postdata['keterangan']);
+
+			return $postdata;
+
 	    }
 
 	    /* 
@@ -283,7 +320,13 @@
 	    */
 	    public function hook_after_add($id) {        
 	        //Your code here
+			$this->data_kendaraan['pengemudi_id'] = $id;
+			DB::table('kendaraan')->insert(
+				$this->data_kendaraan
+			);
 
+			return redirect(url(config('crudbooster.ADMIN_PATH')).'/kendaraan')->with(['message'=>'Data berhasil disimpan !','message_type'=>'success'])->send();
+			exit;
 	    }
 
 	    /* 
@@ -296,12 +339,16 @@
 	    */
 	    public function hook_before_edit(&$postdata,$id) {        
 	        //Your code here
+
 			if($postdata['penanda']!=""){
 				if($postdata['catatan']==""){
-					return CRUDBooster::redirectBack("Harus Mengisi Catatan Blacklist", "warning");
+					return CRUDBooster::redirectBack("Harus Mengisi Catatan", "warning");
+				}
+
+				if( (CRUDBooster::myPrivilegeId() !=1 ) and (CRUDBooster::myPrivilegeId() != 2) ){
+					return CRUDBooster::redirectBack("Hanya Akses Tidak Diperkenankan", "warning");
 				}
 			}
-			
 	    }
 
 	    /* 

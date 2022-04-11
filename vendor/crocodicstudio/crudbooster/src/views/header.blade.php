@@ -80,11 +80,11 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Frontline<span class="caret"></span></a>
               <ul class="dropdown-menu">
+              <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/lokasi'}}">Lokasi</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/cabang'}}">Cabang / Unit</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/pelanggan'}}">Pelanggan</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/kendaraan'}}">Kendaraan</a></li>
-                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/pengemudi'}}">Pengemudi</a></li>
-                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/satuan'}}">Satuan</a></li>
+                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/satuan'}}">Tabel Harga</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/register'}}">Register</a></li>
                 <li role="separator" class="divider"></li>

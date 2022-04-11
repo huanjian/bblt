@@ -5,7 +5,7 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminPelangganController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminDefaultPengemudiController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
@@ -20,43 +20,45 @@
 			$this->button_add = true;
 			$this->button_edit = true;
 			$this->button_delete = true;
-			$this->button_detail = false;
+			$this->button_detail = true;
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "pelanggan";
+			$this->table = "pengemudi";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Kode","name"=>"kd_pelanggan"];
 			$this->col[] = ["label"=>"Nama","name"=>"nama"];
 			$this->col[] = ["label"=>"Alamat","name"=>"alamat"];
+			$this->col[] = ["label"=>"Kota","name"=>"kota"];
 			$this->col[] = ["label"=>"Telepon","name"=>"telepon"];
-			$this->col[] = ["label"=>"Maksimum Piutang","name"=>"maks_piutang"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-3','placeholder'=>'You can only enter the letter only'];
+			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-3','placeholder'=>'Anda hanya dapat memasukkan huruf saja'];
 			$this->form[] = ['label'=>'Alamat','name'=>'alamat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Kota','name'=>'kota','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
 			$this->form[] = ['label'=>'Telepon','name'=>'telepon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
-			$this->form[] = ['label'=>'Lokasi','name'=>'lokasi_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-2','datatable'=>'lokasi,nama_lokasi'];
-			$this->form[] = ['label'=>'Maksimum Piutang','name'=>'maks_piutang','type'=>'money','validation'=>'required','width'=>'col-sm-5'];
-			$this->form[] = ['label'=>'Penanda','name'=>'penanda','type'=>'checkbox','width'=>'col-sm-3','dataenum'=>'blacklist;inactive'];
-			$this->form[] = ['label'=>'Catatan','name'=>'catatan','type'=>'text','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'KTP','name'=>'ktp','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'SIM','name'=>'sim','type'=>'upload','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Penanda','name'=>'penanda','type'=>'checkbox','validation'=>'','width'=>'col-sm-3','dataenum'=>'blacklist;inactive'];
+			$this->form[] = ['label'=>'Catatan','name'=>'catatan','type'=>'text','validation'=>'','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Foto Pengemudi','name'=>'foto','type'=>'upload','validation'=>'required','width'=>'col-sm-3'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-3','placeholder'=>'You can only enter the letter only'];
-			//$this->form[] = ['label'=>'Alamat','name'=>'alamat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
-			//$this->form[] = ['label'=>'Telepon','name'=>'telepon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
-			//$this->form[] = ['label'=>'Lokasi','name'=>'lokasi_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-2','datatable'=>'lokasi,nama_lokasi'];
-			//$this->form[] = ['label'=>'Maksimum Piutang','name'=>'maks_piutang','type'=>'money','validation'=>'required','width'=>'col-sm-5'];
-			//$this->form[] = ['label'=>'Penanda','name'=>'penanda','type'=>'checkbox','width'=>'col-sm-3','dataenum'=>'blacklist'];
-			//$this->form[] = ['label'=>'Catatan','name'=>'catatan','type'=>'text','width'=>'col-sm-5'];
+			//$this->form[] = ["label"=>"Nama","name"=>"nama","type"=>"text","required"=>TRUE,"validation"=>"required|string|min:3|max:70","placeholder"=>"Anda hanya dapat memasukkan huruf saja"];
+			//$this->form[] = ["label"=>"Alamat","name"=>"alamat","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Kota","name"=>"kota","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Telepon","name"=>"telepon","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Penanda","name"=>"penanda","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Catatan","name"=>"catatan","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Ktp","name"=>"ktp","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
+			//$this->form[] = ["label"=>"Sim","name"=>"sim","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
 			# OLD END FORM
 
 			/* 
@@ -262,14 +264,9 @@
 			}
 
 			if($column_index==1){
-				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/pelanggan/edit/'.$this->selected_pk.'">'.$column_value.'</a>';
+				// print($cel_rm)."--->";
+				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/default_pengemudi/edit/'.$this->selected_pk.'">'.$column_value.'</a>';
 			}
-
-			if($column_index==5){
-				$column_value = number_format($column_value);
-			}
-
-
 	    }
 
 	    /*
@@ -281,30 +278,7 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
-			$kode_pelanggan = "P00000";
 
-			$pelanggan = DB::table('pelanggan')->get();
-
-			$jumlahPelanggan = (int)count($pelanggan);
-
-			if( $jumlahPelanggan<= 99999){
-
-				$urutan = $jumlahPelanggan+1;
-
-				$kode_pelanggan = str_pad($urutan, 5, "0", STR_PAD_LEFT);
-
-				$kode_pelanggan = "P".$kode_pelanggan;
-
-			}else{
-
-				$urutan = $jumlahPelanggan+1;
-
-				$kode_pelanggan = "P".$urutan;
-			}
-
-			$postdata['kd_pelanggan'] = $kode_pelanggan;
-
-			return $postdata;
 	    }
 
 	    /* 
@@ -335,23 +309,10 @@
 					return CRUDBooster::redirectBack("Harus Mengisi Catatan", "warning");
 				}
 
-				if( (CRUDBooster::myPrivilegeId() !=1  ) and (CRUDBooster::myPrivilegeId() != 2) ){
-					return CRUDBooster::redirectBack("Hak Akses Tidak Diperkenankan", "warning");
+				if( (CRUDBooster::myPrivilegeId() !=1 ) and (CRUDBooster::myPrivilegeId() != 2) ){
+					return CRUDBooster::redirectBack("Hanya Akses Tidak Diperkenankan", "warning");
 				}
 			}
-
-
-
-			$pelanggan = DB::table('pelanggan')->where('id', $id)->first();
-			if($pelanggan->penanda != "" and $postdata['penanda']==""){
-				if( (CRUDBooster::myPrivilegeId() !=1  ) and (CRUDBooster::myPrivilegeId() != 2) ){
-					return CRUDBooster::redirectBack("Hak Akses Tidak Diperkenankan", "warning");
-				}
-			}
-
-
-
-
 	    }
 
 	    /* 

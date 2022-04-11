@@ -14,13 +14,13 @@
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
-			$this->button_table_action = true;
+			$this->button_table_action = false;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
 			$this->button_edit = true;
-			$this->button_delete = true;
-			$this->button_detail = true;
+			$this->button_delete = false;
+			$this->button_detail = false;
 			$this->button_show = true;
 			$this->button_filter = true;
 			$this->button_import = false;
@@ -31,6 +31,7 @@
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
 			$this->col[] = ["label"=>"Nama","name"=>"nama"];
+			$this->col[] = ["label"=>"Kode","name"=>"kode"];
 			$this->col[] = ["label"=>"Alamat","name"=>"alamat"];
 			$this->col[] = ["label"=>"Telepon","name"=>"telepon"];
 			$this->col[] = ["label"=>"Email","name"=>"email"];
@@ -38,18 +39,20 @@
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
+			$this->form[] = ['label'=>'Kode','name'=>'kode','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
 			$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-4','placeholder'=>'You can only enter the letter only'];
 			$this->form[] = ['label'=>'Alamat','name'=>'alamat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Lokasi','name'=>'lokasi_id','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-2','datatable'=>'lokasi,nama_lokasi'];
 			$this->form[] = ['label'=>'Telepon','name'=>'telepon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
 			$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:cabang','width'=>'col-sm-3','placeholder'=>'Please enter a valid email address'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-			//$this->form[] = ['label'=>'Alamat','name'=>'alamat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Telepon','name'=>'telepon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:cabang','width'=>'col-sm-10','placeholder'=>'Please enter a valid email address'];
+			//$this->form[] = ['label'=>'Nama','name'=>'nama','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-4','placeholder'=>'You can only enter the letter only'];
+			//$this->form[] = ['label'=>'Alamat','name'=>'alamat','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+			//$this->form[] = ['label'=>'Telepon','name'=>'telepon','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			//$this->form[] = ['label'=>'Email','name'=>'email','type'=>'email','validation'=>'required|min:1|max:255|email|unique:cabang','width'=>'col-sm-3','placeholder'=>'Please enter a valid email address'];
 			# OLD END FORM
 
 			/* 
@@ -248,6 +251,19 @@
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
+
+			if($column_index==0){
+				$cel_rm = str_replace("<input type='checkbox' class='checkbox' name='checkbox[]' value='",'', $column_value);
+				$cel_rm = str_replace("'/>",'',$cel_rm);
+				$this->selected_pk = $cel_rm;
+			}
+
+			if($column_index==1){
+				// print($cel_rm)."--->";
+				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/cabang/edit/'.$this->selected_pk.'">'.$column_value.'</a>';
+			}
+
+
 	    }
 
 	    /*

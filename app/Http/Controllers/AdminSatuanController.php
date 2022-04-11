@@ -14,7 +14,7 @@
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
-			$this->button_table_action = true;
+			$this->button_table_action = false;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
@@ -32,18 +32,15 @@
 			$this->col = [];
 			$this->col[] = ["label"=>"Pelanggan","name"=>"pelanggan_id","join"=>"pelanggan,nama"];
 			$this->col[] = ["label"=>"Produk","name"=>"produk"];
-			$this->col[] = ["label"=>"Harga Per KG","name"=>"kilo"];
-			$this->col[] = ["label"=>"Harga Per Koli","name"=>"koli"];
-			$this->col[] = ["label"=>"Harga Per Kubik","name"=>"kubik"];
+			$this->col[] = ["label"=>"Harga","name"=>"label_harga"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
 			$this->form[] = ['label'=>'Pelanggan','name'=>'pelanggan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'pelanggan,nama'];
 			$this->form[] = ['label'=>'Produk','name'=>'produk','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-4'];
-			$this->form[] = ['label'=>'Harga Per KG','name'=>'kilo','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			$this->form[] = ['label'=>'Harga Per Koli','name'=>'koli','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			$this->form[] = ['label'=>'Harga Per Kubik','name'=>'kubik','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Tipe','name'=>'tipe','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-2','dataenum'=>'kg;kubik;koli'];
+			$this->form[] = ['label'=>'Harga','name'=>'harga','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -231,7 +228,7 @@
 	    }
 
 
-	    /*
+	    /*												
 	    | ---------------------------------------------------------------------- 
 	    | Hook for manipulate query of index result 
 	    | ---------------------------------------------------------------------- 
@@ -240,7 +237,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-	            
+
 	    }
 
 	    /*
@@ -251,6 +248,18 @@
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
+
+			if($column_index==0){
+				$cel_rm = str_replace("<input type='checkbox' class='checkbox' name='checkbox[]' value='",'', $column_value);
+				$cel_rm = str_replace("'/>",'',$cel_rm);
+				$this->selected_pk = $cel_rm;
+			}
+
+			if($column_index==1){
+				// print($cel_rm)."--->";
+				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/satuan/edit/'.$this->selected_pk.'">'.$column_value.'</a>';
+			}
+
 	    }
 
 	    /*
@@ -264,6 +273,7 @@
 	        //Your code here
 			$name = DB::table('pelanggan')->where('id', $postdata['pelanggan_id'])->value('nama');
 			$postdata['label_produk'] = $name." ".$postdata['produk'];
+			$postdata['label_harga'] = $postdata['harga']." / ".$postdata['tipe'];
 			return $postdata;
 	    }
 
@@ -291,6 +301,7 @@
 	        //Your code here
 			$name = DB::table('pelanggan')->where('id', $postdata['pelanggan_id'])->value('nama');
 			$postdata['label_produk'] = $name." ".$postdata['produk'];
+			$postdata['label_harga'] = $postdata['harga']." / ".$postdata['tipe'];
 			return $postdata;
 	    }
 
