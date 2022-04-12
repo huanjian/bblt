@@ -57,6 +57,8 @@
 
                 @if(CRUDBooster::isSuperadmin())
                     <li class="header">{{ cbLang('SUPERADMIN') }}</li>
+
+                    @if(CRUDBooster::myPrivilegeId()==1)
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-key'></i> <span>{{ cbLang('Privileges_Roles') }}</span> <i
                                     class="fa fa-angle-{{ cbLang("right") }} pull-{{ cbLang("right") }}"></i></a>
@@ -69,6 +71,8 @@
                                     <span>{{ cbLang('List_Privilege') }}</span></a></li>
                         </ul>
                     </li>
+                    @endif
+
 
                     <li class='treeview'>
                         <a href='#'><i class='fa fa-users'></i> <span>{{ cbLang('Users_Management') }}</span> <i
@@ -83,6 +87,7 @@
                         </ul>
                     </li>
 
+                    @if(CRUDBooster::myPrivilegeId()==1)
                     <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/menu_management*')) ? 'active' : '' }}"><a
                                 href='{{Route("MenusControllerGetIndex")}}'><i class='fa fa-bars'></i>
                             <span>{{ cbLang('Menu_Management') }}</span></a></li>
@@ -159,7 +164,10 @@
                     </li>
 
                     <li class="{{ (Request::is(config('crudbooster.ADMIN_PATH').'/logs*')) ? 'active' : '' }}"><a href='{{Route("LogsControllerGetIndex")}}'><i
-                                    class='fa fa-flag'></i> <span>{{ cbLang('Log_User_Access') }}</span></a></li>
+                                    class='fa fa-flag'></i> <span>{{ cbLang('Log_User_Access') }}</span></a>
+                    </li>
+                    
+                    @endif
                 @endif
 
             </ul><!-- /.sidebar-menu -->

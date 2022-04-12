@@ -86,7 +86,7 @@
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/kendaraan'}}">Kendaraan</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/satuan'}}">Tabel Harga</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/register'}}">Register</a></li>
+                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/register/add'}}">Register</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/manifest'}}">Manifest</a></li>
                 <li role="separator" class="divider"></li>

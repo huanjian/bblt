@@ -26,65 +26,47 @@
 			$this->button_import = false;
 			$this->button_export = false;
 			$this->table = "register";
-			$this->lokasi_login = (int)$this->generate_number_lokasi();
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Tanggal","name"=>"tanggal"];
 			$this->col[] = ["label"=>"Nomor Resi","name"=>"resi"];
-			$this->col[] = ["label"=>"Pengirim","name"=>"pelanggan_id","join"=>"pelanggan,nama"];
-			$this->col[] = ["label"=>"Penerima","name"=>"penerima_id","join"=>"pelanggan,nama"];
-			$this->col[] = ["label"=>"Keterangan","name"=>"keterangan"];
+			$this->col[] = ["label"=>"Alamat Tujuan","name"=>"alamat_tujuan"];
+			$this->col[] = ["label"=>"Banyak Koli","name"=>"banyak_koli"];
+			$this->col[] = ["label"=>"Barang","name"=>"barang"];
+			$this->col[] = ["label"=>"Berat Kg","name"=>"berat_kg"];
+			$this->col[] = ["label"=>"Cabang Id","name"=>"cabang_id","join"=>"cabang,nama"];
+			$this->col[] = ["label"=>"Harga Kg","name"=>"harga_kg"];
+			$this->col[] = ["label"=>"Harga Koli","name"=>"harga_koli"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
-			$columns[] = ['label'=>'Produk','name'=>'produk','type'=>'text','required'=>true];
-			$columns[] = ['label'=>'Keterangan','name'=>'keterangan','type'=>'text','required'=>true];
-			$columns[] = ['label'=>'Tabel Harga','name'=>'satuan_id','type'=>'select','datatable'=>'satuan,label_produk'];
-			$columns[] = ['label'=>'Berat(KG)','name'=>'berat','type'=>'number','required'=>true];
-			$columns[] = ['label'=>'Banyak(Koli)','name'=>'banyak','type'=>'number','required'=>true];
-			$columns[] = ['label'=>'Kubik(M3)','name'=>'kubik','type'=>'number','required'=>true];
-			$columns[] = ['label'=>'Harga','name'=>'harga','type'=>'number','required'=>true, "readonly"=>true];
-			$columns[] = ['label'=>'Sub Total','name'=>'total','type'=>'number',"readonly"=>true,'required'=>true];
-			
-			$this->form = [];
-			$this->form[] = ['label'=>'Pengirim','name'=>'pelanggan_id','type'=>'select2','validation'=>'required|integer|min:0', 'width'=>'col-sm-3','datatable'=>'pelanggan,nama', 'datatable_where'=>'lokasi_id = '.$this->lokasi_login];
-			$this->form[] = ['label'=>'Alamat Pengirim','name'=>'alamat_pengirim','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
-			$this->form[] = ['label'=>'Keterangan','name'=>'keterangan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-5'];
-			$this->form[] = ['label'=>'Penerima','name'=>'penerima_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'pelanggan,nama', 'datatable_where'=>'lokasi_id != '.$this->lokasi_login];
-			$this->form[] = ['label'=>'Alamat Penerima','name'=>'alamat_tujuan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
-
-			
-			$this->form[] = ['label'=>'Register Detail','name'=>'register_detail', "class"=>"col-sm-3",'type'=>'child','columns'=>$columns,'table'=>'register_detail','foreign_key'=>'register_id'];
-
-			// $columns[] = ['label'=>'Tabel Harga','name'=>'satuan_id','type'=>'datamodal','datamodal_table'=>'satuan','datamodal_columns'=>'label_produk,label_harga','datamodal_select_to'=>'label_produk:label_produk','datamodal_where'=>'','datamodal_size'=>'large'];
 			# START FORM DO NOT REMOVE THIS LINE
-			// $this->form = [];
-			// $this->form[] = ['label'=>'Nomor Resi','name'=>'resi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
-			// $this->form[] = ['label'=>'Pengirim','name'=>'pelanggan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'pelanggan,nama'];
-			// $this->form[] = ['label'=>'Alamat Pengirim','name'=>'alamat_pengirim','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
-			// $this->form[] = ['label'=>'Keterangan','name'=>'keterangan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-5'];
-
-			// $this->form[] = ['label'=>'Penerima','name'=>'penerima_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'pelanggan,nama'];
-			// $this->form[] = ['label'=>'Alamat Penerima','name'=>'alamat_tujuan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
-
-			// $this->form[] = ['label'=>'Nama Barang','name'=>'barang','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
-			// $this->form[] = ['label'=>'Keterangan Barang','name'=>'keterangan_barang','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-5'];
-			// $this->form[] = ['label'=>'Satuan','name'=>'satuan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-5','datatable'=>'satuan,label_produk'];
+			$this->form = [];
+			$this->form[] = ['label'=>'Nomor Resi','name'=>'resi','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Pelanggan','name'=>'pelanggan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'pelanggan,nama'];
+			$this->form[] = ['label'=>'Alamat Pengirim','name'=>'alamat_pengirim','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Pembawa','name'=>'pembawa','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Keterangan','name'=>'keterangan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
 
 
-			// $this->form[] = ['label'=>'Banyak Koli','name'=>'banyak_koli','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
-			// $this->form[] = ['label'=>'Berat Kg','name'=>'berat_kg','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
-			// $this->form[] = ['label'=>'Harga Kg','name'=>'harga_kg','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
-			// $this->form[] = ['label'=>'Harga Koli','name'=>'harga_koli','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
-			// $this->form[] = ['label'=>'Harga Kubik','name'=>'harga_kubik','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Cabang','name'=>'cabang_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'cabang,nama'];
+			$this->form[] = ['label'=>'Alamat Tujuan','name'=>'alamat_tujuan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+
+			$this->form[] = ['label'=>'Nama Barang','name'=>'barang','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Keterangan Barang','name'=>'keterangan_barang','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-5'];
+			$this->form[] = ['label'=>'Satuan','name'=>'satuan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-5','datatable'=>'satuan,label_produk'];
+
+
+			$this->form[] = ['label'=>'Banyak Koli','name'=>'banyak_koli','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Berat Kg','name'=>'berat_kg','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Harga Kg','name'=>'harga_kg','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Harga Koli','name'=>'harga_koli','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Harga Kubik','name'=>'harga_kubik','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
 			
 			
-			// $this->form[] = ['label'=>'Lebar','name'=>'lebar','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
-			// $this->form[] = ['label'=>'Panjang','name'=>'panjang','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
-			// $this->form[] = ['label'=>'Tinggi','name'=>'tinggi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
-
-			// $this->form[] = ['label'=>'Orders Detail','name'=>'orders_detail','type'=>'child','columns'=>$columns,'table'=>'pelanggan','foreign_key'=>'pelanggan_id'];
+			$this->form[] = ['label'=>'Lebar','name'=>'lebar','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Panjang','name'=>'panjang','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
+			$this->form[] = ['label'=>'Tinggi','name'=>'tinggi','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-2'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
@@ -206,169 +188,7 @@
 	        | $this->script_js = "function() { ... }";
 	        |
 	        */
-	        $this->script_js = "$( document ).ready(function() {
-				var _token = '';
-				var _tipe = '';
-
-				
-				
-				$('#registerdetailproduk').parent().attr('class', 'col-sm-4');
-				$('#registerdetailketerangan').parent().attr('class', 'col-sm-5');
-				$('#registerdetailsatuan_id').parent().attr('class', 'col-sm-4');
-				$('#registerdetailberat').parent().attr('class', 'col-sm-3');
-				$('#registerdetailbanyak').parent().attr('class', 'col-sm-3');
-				$('#registerdetailkubik').parent().attr('class', 'col-sm-3');
-				$('#registerdetailharga').parent().attr('class', 'col-sm-3');
-				$('#registerdetailtotal').parent().attr('class', 'col-sm-3');
-				
-				
-				$('#panel-form-registerdetail').children().children().css('width', '70%');
-				$('#panel-form-registerdetail').children().children().css('margin', 'auto');
-				
-
-				function ajaxCallBack(retString){
-					_token = retString;
-				}
-
-
-				function readString(){
-					$.ajax({
-						url: '/api/get-token',
-						type: 'POST',
-						success: function(msg) {
-							console.log(msg['data']['access_token']);
-							ajaxCallBack(msg['data']['access_token']);
-						},
-						data: {
-							'secret': 'acf67be3ffbe3bf2ea0855243705da6d'
-						},
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						},
-						error: function(jqXHR, textStatus, errorThrown) {}
-					
-					});
-				};readString();
-
-				console.log(_token);
-
-
-
-				$('#pelanggan_id').on('change',function(){ 
-
-					$.ajax({
-						url: '/api/admin_pelanggan_info',
-						type: 'GET',
-						success: function(msg) {
-							$('#alamat_pengirim').val(msg['data']['alamat']);
-							console.log(msg['data']['alamat']);
-						},
-						data: {
-							'id': $(this).val() 
-						},
-						headers: {
-							Authorization: 'Bearer ' + _token
-						},
-						error: function(jqXHR, textStatus, errorThrown) {}
-					
-						});
-				
-				});
-
-
-				$('#penerima_id').on('change',function(){ 
-
-					$.ajax({
-						url: '/api/admin_pelanggan_info',
-						type: 'GET',
-						success: function(msg) {
-							$('#alamat_tujuan').val(msg['data']['alamat']);
-							console.log(msg['data']['alamat']);
-						},
-						data: {
-							'id': $(this).val()  
-						},
-						headers: {
-							Authorization: 'Bearer ' + _token
-						},
-						error: function(jqXHR, textStatus, errorThrown) {}
-					
-						});
-				
-				});
-
-
-				function ajaxCallTipe(retString){
-					_tipe = retString;
-				}
-
-				$('#registerdetailsatuan_id').on('change',function(){ 
-
-					$.ajax({
-						url: '/api/admin_satuan_detail',
-						type: 'GET',
-						success: function(msg) {
-							$('#registerdetailharga').val(msg['data']['harga']);
-							$('#label_harga').remove();
-							$('#registerdetailharga').after('<label id=\'label_harga\'> / '+msg['data']['tipe']+'</label>');
-							ajaxCallTipe(msg['data']['tipe']);
-							console.log(msg['data']['harga']);
-
-							if(_tipe=='kg'){
-								let _total = $('#registerdetailberat').val() * $('#registerdetailharga').val();
-								$('#registerdetailtotal').val(_total);
-							}else if(_tipe=='koli'){
-								let _total = $('#registerdetailbanyak').val() * $('#registerdetailharga').val();
-								$('#registerdetailtotal').val(_total);
-							}else if(_tipe=='kubik'){
-								let _total = $('#registerdetailkubik').val() * $('#registerdetailharga').val();
-								$('#registerdetailtotal').val(_total);
-							}
-						},
-						data: {
-							'id': $(this).val()  
-						},
-						headers: {
-							Authorization: 'Bearer ' + _token
-						},
-						error: function(jqXHR, textStatus, errorThrown) {}
-					
-						});
-				
-				});
-
-				$('#registerdetailberat').on('change',function(){ 
-					console.log(_tipe);
-					if(_tipe=='kg'){
-						let _total = $('#registerdetailberat').val() * $('#registerdetailharga').val();
-						$('#registerdetailtotal').val(_total);
-					}
-				});
-
-				$('#registerdetailbanyak').on('change',function(){ 
-					console.log(_tipe);
-					if(_tipe=='koli'){
-						let _total = $('#registerdetailbanyak').val() * $('#registerdetailharga').val();
-						$('#registerdetailtotal').val(_total);
-					}
-				});
-
-				$('#registerdetailkubik').on('change',function(){ 
-					console.log(_tipe);
-					if(_tipe=='kubik'){
-						let _total = $('#registerdetailkubik').val() * $('#registerdetailharga').val();
-						$('#registerdetailtotal').val(_total);
-					}
-				});
-
-
-				
-
-
-
-				
-
-			});";
+	        $this->script_js = NULL;
 
 
             /*
@@ -478,26 +298,7 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
-			
 
-			$bulan = date("m"); 
-			$tahun = date("y"); 
-
-			$kode_tempat = $this->generate_number_lokasi();
-			$kode_urut = $this->generate_urutan_berdasarkan_lokasi_resi();
-
-
-
-
-			$postdata['resi'] = "RS".$kode_tempat."-".$tahun.$bulan.$kode_urut;
-			$postdata['tanggal'] = date('Y-m-d');
-			// $postdata['pelanggan_id'] = $postdata['pelanggan_id'];
-			// $postdata['alamat_pengirim'] = $postdata['alamat'];
-			// $postdata['keterangan'] = "keterangan";
-			// $postdata['penerima_id'] = $postdata['penerima_id'];
-			// $postdata['alamat_tujuan'] = "surabaya";
-
-			return $postdata;
 	    }
 
 	    /* 
@@ -565,54 +366,5 @@
 
 	    //By the way, you can still create your own method in here... :) 
 
-		public function generate_number_lokasi(){
-
-			$role_tempat = "";
-			if (strpos(strtolower(CRUDBooster::myPrivilegeName()), 'admin') !== false) {
-				$role_tempat = '01';
-			}else{
-				$role_tempat = strtolower(CRUDBooster::myPrivilegeName());
-			}
-
-			return $role_tempat;
-
-		}
-
-
-		public function generate_urutan_berdasarkan_lokasi_resi(){
-
-			$kode = "";
-			$kode_lokasi = $this->generate_number_lokasi();
-			$kode_lokasi = "RS".$kode_lokasi;
-
-			$jumlahRegisterLokasi = DB::table('register')->where('resi', 'like', '%'.$kode_lokasi.'%' )->get();
-
-			$jumlahRegisterLokasi = (int)count($jumlahRegisterLokasi);
-
-			if( $jumlahRegisterLokasi<= 99999){
-
-				$urutan = $jumlahRegisterLokasi+1;
-
-				$kode = str_pad($urutan, 5, "0", STR_PAD_LEFT);
-
-
-			}else{
-
-				$urutan = $jumlahRegisterLokasi+1;
-
-				$kode = $urutan;
-			}
-
-			return $kode;
-		}
-
-
-		public function getinfo($id){
-
-			return Response::json("hlll");
-		}
-
-
-		
 
 	}

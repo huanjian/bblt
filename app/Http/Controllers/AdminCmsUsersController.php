@@ -17,6 +17,7 @@ class AdminCmsUsersController extends CBController {
 		$this->button_action_style = 'button_icon';	
 		$this->button_import 	   = FALSE;	
 		$this->button_export 	   = FALSE;	
+		$this->last_privilages = "";
 		# END CONFIGURATION DO NOT REMOVE THIS LINE
 	
 		# START COLUMNS DO NOT REMOVE THIS LINE
@@ -59,5 +60,18 @@ class AdminCmsUsersController extends CBController {
 	}
 	public function hook_before_add(&$postdata) {      
 	    unset($postdata['password_confirmation']);
+	}
+
+	public function hook_row_index($column_index,&$column_value) {
+
+		if($column_index==3){
+			$this->last_privilages = $column_value;
+		}
+
+		if($column_index==5 and $this->last_privilages=="Super Administrator"){
+			$column_value = "";
+		}
+
+
 	}
 }
