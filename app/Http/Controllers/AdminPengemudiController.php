@@ -307,6 +307,8 @@
 			unset($postdata['nomor']);
 			unset($postdata['keterangan']);
 
+			$postdata['page_title'] = "Kendaraan";
+
 			return $postdata;
 
 	    }

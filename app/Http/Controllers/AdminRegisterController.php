@@ -4,6 +4,7 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
+	use Barryvdh\DomPDF\Facade as PDF;
 
 	class AdminRegisterController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -15,7 +16,7 @@
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
 			$this->button_table_action = false;
-			$this->button_bulk_action = true;
+			$this->button_bulk_action = false;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
 			$this->button_edit = true;
@@ -230,13 +231,28 @@
 					_token = retString;
 				}
 
+				function callWindow(print_id){
+					let wi = screen.width/2;
+					let he = screen.height/2;
+					let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+					width=600,height=600,left=540,top=0`;
+					
+					open('/admin/register/detail/'+print_id, 'test', params);
+
+				}
+				
+				var _print = '".Session::get('print_register')."';
+
+				if(_print != ''){
+					callWindow(_print);
+				}
+
 
 				function readString(){
 					$.ajax({
 						url: '/api/get-token',
 						type: 'POST',
 						success: function(msg) {
-							console.log(msg['data']['access_token']);
 							ajaxCallBack(msg['data']['access_token']);
 						},
 						data: {
@@ -249,8 +265,6 @@
 					
 					});
 				};readString();
-
-				console.log(_token);
 
 
 
@@ -487,10 +501,12 @@
 			$kode_urut = $this->generate_urutan_berdasarkan_lokasi_resi();
 
 
-
+			$pelanggan_lokasi_id = DB::table('pelanggan')->where('id',$postdata['penerima_id'])->pluck('lokasi_id')->first();
 
 			$postdata['resi'] = "RS".$kode_tempat."-".$tahun.$bulan.$kode_urut;
 			$postdata['tanggal'] = date('Y-m-d');
+			$postdata['pelanggan_lokasi_id'] = $pelanggan_lokasi_id;
+
 			// $postdata['pelanggan_id'] = $postdata['pelanggan_id'];
 			// $postdata['alamat_pengirim'] = $postdata['alamat'];
 			// $postdata['keterangan'] = "keterangan";
@@ -509,6 +525,13 @@
 	    */
 	    public function hook_after_add($id) {        
 	        //Your code here
+			$register_detail = DB::table('register_detail')->where('register_id',$id)->get();
+
+			foreach($register_detail as $detail){
+				DB::table('register_detail')->where('id', $detail->id)->update(['sisa_manifest' => $detail->banyak]);
+			}
+
+			Session::put('print_register',$id);
 
 	    }
 
@@ -589,11 +612,11 @@
 
 			$jumlahRegisterLokasi = (int)count($jumlahRegisterLokasi);
 
-			if( $jumlahRegisterLokasi<= 99999){
+			if( $jumlahRegisterLokasi<= 999999){
 
 				$urutan = $jumlahRegisterLokasi+1;
 
-				$kode = str_pad($urutan, 5, "0", STR_PAD_LEFT);
+				$kode = str_pad($urutan, 6, "0", STR_PAD_LEFT);
 
 
 			}else{
@@ -610,6 +633,45 @@
 		public function getinfo($id){
 
 			return Response::json("hlll");
+		}
+
+
+		public function getDetail($id) {
+			if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+			}
+
+			// if(Session::get('print_register')==""){
+			// 	return;
+			// }
+			  
+			$data = [];
+			$data['page_title'] = 'Detail Data';
+			$data['row'] = DB::table('register')
+			->join('pelanggan as pengirim','pengirim.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->select('register.*', 'penerima.*', 'pengirim.*', 'pengirim.nama as nama_pengirim', 'pengirim.kd_pelanggan as kd_pengirim', 'penerima.nama as nama_penerima', 'penerima.kd_pelanggan as kd_penerima')
+			->where('register.id',$id)->first();
+
+
+
+			$data['detail'] = DB::table('register_detail')
+			->join('register','register.id','=','register_detail.register_id')
+			->join('pelanggan','pelanggan.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->join('satuan', 'satuan.id','=','register_detail.satuan_id')
+			->select('register_detail.*', 'register.*', 'pelanggan.*', 'penerima.*', 'penerima.nama as nama_penerima', 'satuan.*')
+			->where('register.id',$id)
+			->get();
+
+
+			$datatopdf = PDF::loadView('register/print', $data);
+
+			$pdf = PDF::loadView('register/print', $data);
+
+			Session::forget('print_register');
+    		// return $pdf->download('invoice.pdf');
+			return $pdf->stream();
 		}
 
 
