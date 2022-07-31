@@ -174,7 +174,6 @@
 
 
 
-
 				$('#parent-form-area').css('float', 'left');
 				$('#parent-form-area').css('width', '50%');
 				$('#parent-form-area').css('margin-left', '5%');
@@ -325,6 +324,7 @@
 										_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td><input class=\'input_manifest\' resi=\''+value.resi+'\' number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' type=\'text\' value=\''+value_text+'\' size=\'2\'></td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
 									}else{
 										_html = '<tr><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td><input class=\'input_manifest\' resi=\''+value.resi+'\'  number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' type=\'text\' value=\''+value_text+'\' size=\'2\'></td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
+
 									}
 									_i = _i + 1;
 
@@ -431,7 +431,6 @@
 
 					
 				});
-
 
 				function addRowHandlers() {
 					var table = document.getElementById('data_details');
@@ -626,7 +625,7 @@
 					
 					});*/
 				});
-				
+
 
 			});";
 
@@ -759,7 +758,7 @@
 			if($column_index==1){
 				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/manifest/info/'.$this->selected_pk.'">'.$column_value.'</a>';
 			}
-			
+		
 	    }
 
 	    /*
@@ -776,6 +775,7 @@
 
 			$kode_tempat = $this->generate_number_lokasi();
 			$kode_urut = $this->generate_urutan_berdasarkan_lokasi_manifest();
+
 
 
 			unset($postdata['register_id']);
@@ -960,7 +960,6 @@
 		}
 
 
-
 		public function generate_number_lokasi(){
 
 			$role_tempat = "";
@@ -1075,6 +1074,7 @@
 			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
 			// ->select('manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'penerima.*', 'penerima.nama as nama_penerima')
 			->select('manifest_detail.*', 'manifest_detail.qty as manifest_qty', 'manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'pelanggan.nama as nama_pengirim', 'penerima.*', 'penerima.nama as nama_penerima')
+
 			->where('manifest.id',$id)
 			->get();
 

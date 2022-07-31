@@ -16,7 +16,7 @@
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
 			$this->button_table_action = false;
-			$this->button_bulk_action = true;
+			$this->button_bulk_action = false;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
 			$this->button_edit = true;
@@ -590,9 +590,9 @@
 				DB::table('register_detail')->where('id', $detail->id)->update(['sisa_manifest' => $detail->banyak]);
 			}
 
-
 			$bayar = DB::table('pembayaran')->orderBy('id','desc')->first();
 			DB::table('pembayaran')->where('id', $bayar->id)->update(['register_id' => $id]);
+
 
 			Session::put('print_register',$id);
 
@@ -774,6 +774,45 @@
 			$data['page_title'] = 'Detail Data';
 
 			return $this->view('register/add',$data);
+		}
+
+
+		public function getDetail($id) {
+			if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+			}
+
+			// if(Session::get('print_register')==""){
+			// 	return;
+			// }
+			  
+			$data = [];
+			$data['page_title'] = 'Detail Data';
+			$data['row'] = DB::table('register')
+			->join('pelanggan as pengirim','pengirim.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->select('register.*', 'penerima.*', 'pengirim.*', 'pengirim.nama as nama_pengirim', 'pengirim.kd_pelanggan as kd_pengirim', 'penerima.nama as nama_penerima', 'penerima.kd_pelanggan as kd_penerima')
+			->where('register.id',$id)->first();
+
+
+
+			$data['detail'] = DB::table('register_detail')
+			->join('register','register.id','=','register_detail.register_id')
+			->join('pelanggan','pelanggan.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->join('satuan', 'satuan.id','=','register_detail.satuan_id')
+			->select('register_detail.*', 'register.*', 'pelanggan.*', 'penerima.*', 'penerima.nama as nama_penerima', 'satuan.*')
+			->where('register.id',$id)
+			->get();
+
+
+			$datatopdf = PDF::loadView('register/print', $data);
+
+			$pdf = PDF::loadView('register/print', $data);
+
+			Session::forget('print_register');
+    		// return $pdf->download('invoice.pdf');
+			return $pdf->stream();
 		}
 
 

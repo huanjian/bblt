@@ -34,6 +34,7 @@
 
 				$resi = DB::table('register')
 				->where('resi','like','%RS0'.(int)$this->lokasi_pengirim.'%' )->where('pelanggan_lokasi_id',$this->lokasi_penerima)->orderByRaw('tanggal ASC')->get();
+
 				
 				$result = $resi;
 				
