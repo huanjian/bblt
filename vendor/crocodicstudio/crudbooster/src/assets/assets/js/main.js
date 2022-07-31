@@ -134,5 +134,5 @@
       loader_notification();
       setInterval(function() {
           loader_notification();
-      },10000);
+      },100000);
     });	

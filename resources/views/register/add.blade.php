@@ -56,6 +56,26 @@
                                 @endif
                                 @if(CRUDBooster::isCreate() || CRUDBooster::isUpdate())
 
+                                    @php
+                                        $url_current = CRUDBooster::mainpath("?".http_build_query(@$_GET));
+                                        if (str_contains($url_current, "register")){
+                                    @endphp
+                                        <input type="hidden" name="label_pengirim" value="1" />
+                                        <input type="submit" name="button_pengirim" value='Tagih Pengirim' class='btn btn-success'>
+                                        </form>
+
+                                        <input type="hidden" name="label_tunai" value="1" />
+                                        <input type="submit" name="button_tunai" value='Tunai' class='btn btn-success'>
+                                        </form>
+
+                                        <input type="hidden" name="label_penerima" value="1" />
+                                        <input type="submit" name="button_penerima" value='Tagih Penerima' class='btn btn-success'>
+                                        </form>
+                                    @php
+                                        }
+                                        else{
+                                    @endphp
+
                                     @if(CRUDBooster::isCreate() && $button_addmore==TRUE && $command == 'add')
                                         <input type="submit" name="submit" value='{{cbLang("button_save_more")}}' class='btn btn-success'>
                                     @endif
@@ -63,6 +83,10 @@
                                     @if($button_save && $command != 'detail')
                                         <input type="submit" name="submit" value='{{cbLang("button_save")}}' class='btn btn-success'>
                                     @endif
+                                    
+                                    @php 
+                                        }
+                                    @endphp
 
                                 @endif
                             </div>

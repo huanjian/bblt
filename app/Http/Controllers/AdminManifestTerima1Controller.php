@@ -6,16 +6,16 @@
 	use CRUDBooster;
 	use Barryvdh\DomPDF\Facade as PDF;
 
-	class AdminManifestController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminManifestTerima1Controller extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "nomor_manifest";
+			$this->title_field = "id";
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
-			$this->button_table_action = false;
+			$this->button_table_action = true;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
@@ -26,46 +26,31 @@
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "manifest";
-			$this->list_tujuan = $this->tujuan_rute();
+			$this->table = "manifest_terima";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Nomor Manifest","name"=>"nomor_manifest"];
-			$this->col[] = ["label"=>"Kendaraan","name"=>"kendaraan_id","join"=>"kendaraan,nomor"];
-			$this->col[] = ["label"=>"Pengemudi","name"=>"pengemudi_id","join"=>"pengemudi,nama"];
-			$this->col[] = ["label"=>"Tanggal Berangkat","name"=>"tanggal_berangkat"];
-			$this->col[] = ["label"=>"Tujuan","name"=>"lokasi_id","join"=>"lokasi,nama_lokasi"];
-			$this->col[] = ["label"=>"Alamat Tujuan","name"=>"alamat_tujuan"];
-			$this->col[] = ["label"=>"Keterangan","name"=>"keterangan"];
+			$this->col[] = ["label"=>"No Terima","name"=>"nomor_terima"];
+			$this->col[] = ["label"=>"Tanggal","name"=>"tanggal"];
+			$this->col[] = ["label"=>"Catatan","name"=>"catatan"];
+			$this->col[] = ["label"=>"Checkby","name"=>"checkby"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			// $this->form[] = ['label'=>'Nomor Manifest','name'=>'nomor_manifest','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
-			$this->form[] = ['label'=>'Kendaraan','name'=>'kendaraan_id','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-5','datatable'=>'kendaraan,nomor'];
-			$this->form[] = ['label'=>'Pengemudi','name'=>'pengemudi_id','type'=>'select','validation'=>'required|integer|min:0','width'=>'col-sm-5','datatable'=>'pengemudi,nama'];
-			$this->form[] = ['label'=>'Tanggal Berangkat','name'=>'tanggal_berangkat','type'=>'date','validation'=>'required|date','width'=>'col-sm-5', 'value'=>date("Y-m-d"), 'disabled'=>true];
-			$this->form[] = ['label'=>'Tujuan','name'=>'lokasi_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-6','datatable'=>'lokasi,nama_lokasi', 'datatable_where'=>'id IN ('.$this->list_tujuan.')'];
-			// $this->form[] = ['label'=>'Register','name'=>'register_id','type'=>'select','validation'=>'required|min:0','width'=>'col-sm-6','datatable'=>''];
-			$this->form[] = ['label'=>'Alamat Tujuan','name'=>'alamat_tujuan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-8'];
-			$this->form[] = ['label'=>'Keterangan','name'=>'keterangan','type'=>'text','validation'=>'min:1|max:255','width'=>'col-sm-8'];
-			
+			// $this->form[] = ['label'=>'No Terima','name'=>'nomor_terima','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Tanggal','name'=>'tanggal','type'=>'date','validation'=>'required|date','width'=>'col-sm-3', 'value'=>date("Y-m-d"), 'disabled'=>true];
+			$this->form[] = ['label'=>'Catatan','name'=>'catatan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-8'];
+			// $this->form[] = ['label'=>'Check by','name'=>'checkby','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-3'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ["label"=>"Alamat Tujuan","name"=>"alamat_tujuan","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Cabang Id","name"=>"cabang_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"cabang,nama"];
-			//$this->form[] = ["label"=>"Kendaraan Id","name"=>"kendaraan_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"kendaraan,id"];
-			//$this->form[] = ["label"=>"Keterangan","name"=>"keterangan","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Nomor Manifest","name"=>"nomor_manifest","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Pengemudi Id","name"=>"pengemudi_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"pengemudi,nama"];
-			//$this->form[] = ["label"=>"Quantity Awal","name"=>"quantity_awal","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Register Id","name"=>"register_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"register,id"];
-			//$this->form[] = ["label"=>"Sequence","name"=>"sequence","type"=>"text","required"=>TRUE,"validation"=>"required|min:1|max:255"];
-			//$this->form[] = ["label"=>"Tanggal Berangkat","name"=>"tanggal_berangkat","type"=>"date","required"=>TRUE,"validation"=>"required|date"];
+			//$this->form[] = ['label'=>'No Terima','name'=>'nomor_terima','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			//$this->form[] = ['label'=>'Tanggal','name'=>'tanggal','type'=>'date','validation'=>'required|date','width'=>'col-sm-3' , 'value'=>date("Y-m-d"), 'disabled'=>true];
+			//$this->form[] = ['label'=>'Catatan','name'=>'catatan','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-8'];
+			//$this->form[] = ['label'=>'Checkby','name'=>'checkby','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-3'];
 			# OLD END FORM
 
 			/* 
@@ -191,10 +176,7 @@
 						var _thiscap = $(this).attr('number');
 						var _thisid = $(this).attr('alt');
 						var _thisvalue = parseInt($(this).html());
-						$('#sisa'+_thisid).html(_thiscap);
-						console.log(_thiscap);
-						console.log(_thisid);
-						console.log(_thisvalue);
+						$('#sisa'+_thisid).html(_thisvalue);
 					});
 				}
 
@@ -322,9 +304,9 @@
 
 
 									if(_i%2==0){
-										_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td><input class=\'input_manifest\' resi=\''+value.resi+'\' number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' type=\'text\' value=\''+value_text+'\' size=\'2\'></td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
+										_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td>'+value.sisa_manifest+'</td><td><input class=\'input_manifest\' resi=\''+value.resi+'\' number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' type=\'text\' value=\''+value_text+'\' size=\'2\'></td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
 									}else{
-										_html = '<tr><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td><input class=\'input_manifest\' resi=\''+value.resi+'\'  number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' type=\'text\' value=\''+value_text+'\' size=\'2\'></td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
+										_html = '<tr><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td>'+value.sisa_manifest+'</td><td><input class=\'input_manifest\' resi=\''+value.resi+'\'  number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' type=\'text\' value=\''+value_text+'\' size=\'2\'></td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
 									}
 									_i = _i + 1;
 
@@ -446,7 +428,7 @@
 									var id = cell.innerHTML;
 
 									$.ajax({
-										url: '/api/resi',
+										url: '/api/terima_maniifest',
 										type: 'GET',
 										success: function(msg) {
 											
@@ -459,22 +441,22 @@
 													var value_text = 0;
 													var _sisa_chart = 0
 				
-													if(value.temporary != null){
-														value_text = value.temporary;
+													if(value.terima != null){
+														value_text = value.terima;
 													}
 				
-													if(value.sisa_chart != null){
-														_sisa_chart = value.sisa_chart;
+													if(value.selisih != null){
+														_sisa_chart = value.selisih;
 													}else{
-														_sisa_chart = value.sisa_manifest;
+														_sisa_chart = value.qty_awal;
 													}
 				
 				
 				
 													if(_i%2==0){
-														_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td  class=\'editMe input_manifest\' resi=\''+value.resi+'\'  number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
+														_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.nomor_manifest+'</td><td>'+value.tanggal_berangkat+'</td><td>'+value.resi+'</td><td>'+value.produk+'</td><td>'+value.qty_awal+'</td><td  class=\'editMe input_manifest\' nomor=\''+value.nomor_manifest+'\' mn=\''+value.man_id+'\' resi=\''+value.resi+'\'  number=\''+value.qty_awal+'\' alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
 													}else{
-														_html = '<tr><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td  class=\'editMe input_manifest\' number=\''+value.sisa_manifest+'\' resi=\''+value.resi+'\'  alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
+														_html = '<tr><td>'+_i+'</td><td>'+value.nomor_manifest+'</td><td>'+value.tanggal_berangkat+'</td><td>'+value.resi+'</td><td>'+value.produk+'</td><td>'+value.qty_awal+'</td><td  class=\'editMe input_manifest\' nomor=\''+value.nomor_manifest+'\'  mn=\''+value.man_id+'\' resi=\''+value.resi+'\' number=\''+value.qty_awal+'\'  alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
 													}
 													_i = _i + 1;
 				
@@ -486,7 +468,7 @@
 											},
 				
 										data: {
-											'resi' : id
+											'manifest' : id
 										},
 										headers: {
 											Authorization: 'Bearer ' + _token
@@ -510,25 +492,24 @@
 
 					$('#table_register_detail .input_manifest').each(function(){
 
-						this_resi = $(this).attr('resi');
+						this_resi = $(this).attr('nomor');
 
 						chart.push({
 							regid : $(this).attr('alt'),
 							qty : $(this).html(),
-							session: '".session()->getId()."'
+							session: '".session()->getId()."',
+							mn: $(this).attr('mn')
 						});
 
 						if( (parseInt($(this).html()) > $(this).attr('number'))   ){
 							_flag_tidak_valid = true;
 							console.log('lebih banyak');
-							$(this).html(0);
 							return;
 						}
 
 						if( (parseInt($(this).html()) < 0) ){
 							_flag_tidak_valid = true;
 							console.log('min 0');
-							$(this).html(0);
 							return;
 						}
 						
@@ -543,7 +524,7 @@
 
 
 					$.ajax({
-						url: '/api/manifest',
+						url: '/api/terima',
 						type: 'POST',
 						success: function(msg) {
 							
@@ -553,9 +534,9 @@
 								$.each( msg, function( key, value ) {
 									var _html = '';
 									if(_i%2==0){
-										_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td>'+value.temporary+'</td></tr>';
+										_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.nomor_manifest+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td>'+value.temporary+'</td></tr>';
 									}else{
-										_html = '<tr><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td>'+value.temporary+'</td></tr>';
+										_html = '<tr><td>'+_i+'</td><td>'+value.nomor_manifest+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td>'+value.temporary+'</td></tr>';
 									}
 									_i = _i + 1;
 
@@ -576,8 +557,8 @@
 					});
 
 
-					/*$.ajax({
-						url: '/api/resi',
+					$.ajax({
+						url: '/api/terima_maniifest',
 						type: 'GET',
 						success: function(msg) {
 							
@@ -590,22 +571,22 @@
 									var value_text = 0;
 									var _sisa_chart = 0
 
-									if(value.temporary != null){
-										value_text = value.temporary;
+									if(value.terima != null){
+										value_text = value.terima;
 									}
 
-									if(value.sisa_chart != null){
-										_sisa_chart = value.sisa_chart;
+									if(value.selisih != null){
+										_sisa_chart = value.selisih;
 									}else{
-										_sisa_chart = value.sisa_manifest;
+										_sisa_chart = value.qty_awal;
 									}
 
 
 
 									if(_i%2==0){
-										_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td  class=\'editMe input_manifest\' resi=\''+value.resi+'\'  number=\''+value.sisa_manifest+'\' alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
+										_html = '<tr style=\'background-color:#eee\'><td>'+_i+'</td><td>'+value.nomor_manifest+'</td><td>'+value.tanggal_berangkat+'</td><td>'+value.resi+'</td><td>'+value.produk+'</td><td>'+value.qty_awal+'</td><td  class=\'editMe input_manifest\' nomor=\''+value.nomor_manifest+'\' mn=\''+value.man_id+'\' resi=\''+value.resi+'\'  number=\''+value.qty_awal+'\' alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
 									}else{
-										_html = '<tr><td>'+_i+'</td><td>'+value.resi+'</td><td>'+value.tanggal+'</td><td>'+value.produk+'</td><td id=\'awal'+value_id+'\'>'+value.sisa_manifest+'</td><td  class=\'editMe input_manifest\' number=\''+value.sisa_manifest+'\' resi=\''+value.resi+'\'  alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
+										_html = '<tr><td>'+_i+'</td><td>'+value.nomor_manifest+'</td><td>'+value.tanggal_berangkat+'</td><td>'+value.resi+'</td><td>'+value.produk+'</td><td>'+value.qty_awal+'</td><td  class=\'editMe input_manifest\' nomor=\''+value.nomor_manifest+'\' number=\''+value.qty_awal+'\' mn=\''+value.man_id+'\' resi=\''+value.resi+'\'  alt=\''+value_id+'\' style=\'background-color:#fff2cd\'>'+value_text+'</td><td id=\'sisa'+value_id+'\'>'+_sisa_chart+'</td></tr>';
 									}
 									_i = _i + 1;
 
@@ -617,14 +598,14 @@
 							},
 
 						data: {
-							'resi' : this_resi
+							'manifest' : this_resi
 						},
 						headers: {
 							Authorization: 'Bearer ' + _token
 						},
 						error: function(jqXHR, textStatus, errorThrown) {}
 					
-					});*/
+					});
 				});
 				
 
@@ -676,28 +657,7 @@
 	        | $this->style_css = ".style{....}";
 	        |
 	        */
-	        $this->style_css = "
-				.sc_tab > tr {
-					width: 98%;
-					display: inline-table;
-					height:60px;
-					table-layout: fixed;
-				  
-				}
-				
-				.sc_tab > table{
-					height:300px; 
-					display: -moz-groupbox;
-					width: 100%;
-					max-width: 100%;
-				}
-				.sc_tab > tbody{
-					overflow-y: scroll;
-					height: 200px;
-					width: 98%;
-					position: absolute;
-				}
-			";
+	        $this->style_css = NULL;
 	        
 	        
 	        
@@ -757,9 +717,10 @@
 			}
 
 			if($column_index==1){
-				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/manifest/info/'.$this->selected_pk.'">'.$column_value.'</a>';
+				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/manifest_terima/info/'.$this->selected_pk.'">'.$column_value.'</a>';
 			}
-			
+
+
 	    }
 
 	    /*
@@ -771,18 +732,19 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
+
 			$bulan = date("m"); 
 			$tahun = date("y"); 
 
 			$kode_tempat = $this->generate_number_lokasi();
 			$kode_urut = $this->generate_urutan_berdasarkan_lokasi_manifest();
 
-
-			unset($postdata['register_id']);
-			$postdata['tanggal_berangkat'] = date('Y-m-d');
-			$postdata['nomor_manifest'] = "MN".$kode_tempat."-".$tahun.$bulan.$kode_urut;
+			$postdata['checkby'] = CRUDBooster::myId();
+			$postdata['tanggal'] = date('Y-m-d');
+			$postdata['nomor_terima'] = "RF".$kode_tempat."-".$tahun.$bulan.$kode_urut;
 
 			return $postdata;
+
 	    }
 
 	    /* 
@@ -795,43 +757,30 @@
 	    public function hook_after_add($id) {        
 	        //Your code here
 
-			$resi = DB::table('manifest_chart')
-				->join('register_detail', 'manifest_chart.register_detail_id', '=', 'register_detail.id')
-				->join('register', 'register.id', '=', 'register_detail.register_id')
-				->where('manifest_chart.session', '=', session()->getId())
-				->where('manifest_chart.temporary', '!=', 0)
-				->orderByRaw('tanggal ASC')
-				->get();
+			$resi = DB::table('terima_chart')
+					->join('register_detail', 'terima_chart.register_detail_id', '=', 'register_detail.id')
+					->join('register', 'register.id', '=', 'register_detail.register_id')
+					->join('manifest', 'manifest.id', '=', 'terima_chart.manifest_id')
+					->select(DB::raw('manifest.id as manifest_id, register_detail.id as register_detail_id, terima_chart.temporary as qty, (select register_detail.total / register_detail.banyak * terima_chart.temporary) as total' ))
+					->where('terima_chart.session', '=', session()->getId())
+					->where('terima_chart.temporary', '!=', 0)
+					->orderByRaw('tanggal ASC')
+					->get();
 
-			
-			foreach($resi as $det){
-				$digunakan = $det->qty_manifest + $det->temporary;
-				$sisa = $det->banyak - $digunakan;
+			$tanggal = date('Y-m-d H:i:s');
+		
+			foreach($resi as $chart){
 
-				DB::table('register_detail')
-				->where('id', $det->register_detail_id)
-				->update(['qty_manifest' => $digunakan, 'sisa_manifest'=>$sisa]);
-
-			}
-
-			$charts = DB::table('manifest_chart')->where('session', '=', session()->getId())->get();
-
-			foreach($charts as $chart){
-
-				if($chart->temporary>0){
-					DB::table('manifest_detail')->insert([
-						['manifest_id' => $id, 'register_detail_id' => $chart->register_detail_id, 'qty'=>$chart->temporary, 'created'=>$chart->created],
+				if($chart->qty>0){
+					DB::table('manifest_terimabarang')->insert([
+						['manifest_terima_id' => $id,'manifest_id' => $chart->manifest_id, 'register_detail_id' => $chart->register_detail_id, 'qty'=>$chart->qty, 'total' => round($chart->total,0), 'created'=>$tanggal],
 					]);
 				}
 
 			}
+			$deleted = DB::table('terima_chart')->where('session', '=', session()->getId())->delete();
+			$deleted = DB::table('terima_chart')->where('temporary', '=', 0)->delete();
 
-
-
-			$deleted = DB::table('manifest_chart')->where('session', '=', session()->getId())->delete();
-			$deleted = DB::table('manifest_chart')->where('temporary', '=', 0)->delete();
-
-			Session::put('print_manifest',$id);
 
 	    }
 
@@ -845,19 +794,6 @@
 	    */
 	    public function hook_before_edit(&$postdata,$id) {        
 	        //Your code here
-
-			$bulan = date("m"); 
-			$tahun = date("y"); 
-
-			$kode_tempat = $this->generate_number_lokasi();
-			$kode_urut = $this->generate_urutan_berdasarkan_lokasi_manifest();
-
-
-
-
-			$postdata['nomor_manifest'] = "MN".$kode_tempat."-".$tahun.$bulan.$kode_urut;
-			$postdata['tanggal_berangkat'] = date('Y-m-d');
-
 
 	    }
 
@@ -901,66 +837,6 @@
 
 	    //By the way, you can still create your own method in here... :) 
 
-		public function getAdd() {
-			if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {    
-			  CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
-			}
-
-			
-			$data = [];
-			$data['page_title'] = 'Tambah Manifest';
-
-			$resi = DB::table('manifest_chart')
-					->join('register_detail', 'manifest_chart.register_detail_id', '=', 'register_detail.id')
-					->join('register', 'register.id', '=', 'register_detail.register_id')
-					->where('manifest_chart.session', '=', session()->getId())
-					->where('manifest_chart.temporary', '!=', 0)
-					->orderByRaw('tanggal ASC')
-					->get();
-
-
-
-			$sum = DB::table('register')
-			->join('register_detail', 'register.id','=','register_detail.register_id')
-			->select(DB::raw('register.resi, SUM(register_detail.sisa_manifest) as sisa, SUM(register_detail.banyak) as banyak'))
-			->groupBy(DB::raw("register.resi"))
-			->havingRaw('GROUP_CONCAT(register.resi) LIKE ?',['%RS0'.(int)$this->generate_number_lokasi().'%'])
-			->havingRaw('sisa > ?', [0])
-			->get();
-
-			$array_sum = [];
-			$array_banyak = [];
-			$list_available = [];
-			if(count($sum)>0){
-				foreach($sum as $s){
-					$array_sum[$s->resi] = $s->sisa;
-					$array_banyak[$s->resi] = $s->banyak;
-					$list_available[] = $s->resi;
-				}
-			}
-
-
-			$register = DB::table('register')
-					->join('pelanggan', 'register.penerima_id','=','pelanggan.id')
-					->join('lokasi','pelanggan.lokasi_id','=','lokasi.id')
-					->where('resi','like','%RS0'.(int)$this->generate_number_lokasi().'%' )
-					->whereIn('resi', $list_available)
-					->orderByRaw('tanggal ASC')->get();
-
-
-			
- 
-			$data['chart'] = $resi;
-			$data['register'] = $register;
-			$data['array_sum'] = $array_sum;
-			$data['array_banyak'] = $array_banyak;
-			
-			//Please use view method instead view method from laravel
-			return $this->view('manifest/add',$data);
-		}
-
-
-
 		public function generate_number_lokasi(){
 
 			$role_tempat = "";
@@ -979,11 +855,11 @@
 
 			$kode = "";
 			$kode_lokasi = $this->generate_number_lokasi();
-			$kode_lokasi = "MN".$kode_lokasi;
+			$kode_lokasi = "RF".$kode_lokasi;
 
 
-			$jumlahRegisterLokasi = DB::table('manifest')->where('nomor_manifest', 'like', '%'.$kode_lokasi.'%' )->whereMonth('tanggal_berangkat', '=', date('m'))
-			->whereYear('tanggal_berangkat', '=', date('Y'))->get();
+			$jumlahRegisterLokasi = DB::table('manifest_terima')->where('nomor_terima', 'like', '%'.$kode_lokasi.'%' )->whereMonth('tanggal', '=', date('m'))
+			->whereYear('tanggal', '=', date('Y'))->get();
 
 			$jumlahRegisterLokasi = (int)count($jumlahRegisterLokasi);
 
@@ -1005,87 +881,129 @@
 		}
 
 
-		public function tujuan_rute(){
-			$kode_lokasi = (int)$this->generate_number_lokasi();
-
-			$lokasi_tujuan = DB::table('rute')->where('asal_id', '=', $kode_lokasi )->pluck('tujuan_id')->toArray();
-
-			$in_list = "";
-
-			foreach($lokasi_tujuan as $lokasi){
-				$in_list = $in_list.$lokasi.",";
+		public function getAdd() {
+			if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {    
+			  CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 			}
 
-			$in_list = substr_replace($in_list, "", -1);
+			
+			$data = [];
+			$data['page_title'] = 'Tambah Manifest';
+	
+			$resi = DB::table('terima_chart')
+				->join('register_detail', 'terima_chart.register_detail_id', '=', 'register_detail.id')
+				->join('register', 'register.id', '=', 'register_detail.register_id')
+				->join('manifest', 'manifest.id', '=', 'terima_chart.manifest_id')
+				->where('terima_chart.session', '=', session()->getId())
+				->where('terima_chart.temporary', '!=', 0)
+				->orderByRaw('tanggal ASC')
+				->get();
 
-			return $in_list;
+
+
+			// $sum = DB::table('register')
+			// ->join('register_detail', 'register.id','=','register_detail.register_id')
+			// ->select(DB::raw('register.resi, SUM(register_detail.sisa_manifest) as sisa, SUM(register_detail.banyak) as banyak'))
+			// ->groupBy(DB::raw("register.resi"))
+			// ->havingRaw('GROUP_CONCAT(register.resi) LIKE ?',['%RS0'.(int)$this->generate_number_lokasi().'%'])
+			// ->havingRaw('banyak > ?', [0])
+			// ->get();
+
+
+			// $sum = DB::select("select (select sum(`temporary`) from `terima_chart` where `register_detail_id` = `register_detail`.`id`)  as `terima`, (select sum(`manifest_terimabarang`.`qty`) from `manifest_terimabarang` where `manifest_terimabarang`.`register_detail_id` = `register_detail`.`id`) as `terimabarang`, (select CAST(`qty_manifest` AS DECIMAL) - CAST(`terimabarang` AS DECIMAL) ) as qty_awal, (select CAST(`qty_manifest` AS DECIMAL) - CAST(`terimabarang` AS DECIMAL) - CAST(`terima` AS DECIMAL) ) as selisih , `register_detail`.*, `register_detail`.`id` as `reg_detail_id`, `register`.*, `manifest`.*, `manifest`.`id` as `man_id`   from `register_detail` left join `manifest_detail` on `manifest_detail`.`register_detail_id` = `register_detail`.`id` left join `manifest` on `manifest`.`id` = `manifest_detail`.`manifest_id` left join `register` on `register`.`id` = `register_detail`.`register_id` where `manifest`.`nomor_manifest` LIKE '?' group by `register_detail`.`id` HAVING qty_awal > 0 order by tanggal ASC", ['%MN0'.(int)$this->generate_number_lokasi().'%']);
+				
+			// print_r($sum);
+			// $list_available = [];
+			// if(count($sum)>0){
+			// 	foreach($sum as $s){
+			// 		$list_available[] = $s->nomor_manifest;
+			// 	}
+			// }
+			
+			// print_r($list_available);
+			// $list_available = array_unique($list_available);
+			// print_r($list_available);
+
+
+			$register = DB::table('manifest')
+					->select(DB::raw('(select sum(`manifest_terimabarang`.`qty`) from `manifest_terimabarang` where `manifest_terimabarang`.`manifest_id` = `manifest`.`id`) as `terimabarang`'), DB::raw('(select sum(`manifest_detail`.`qty`) from `manifest_detail` where `manifest_detail`.`manifest_id` = `manifest`.`id`) as `qty_detail`'), DB::raw( '(select CAST(`qty_detail` AS DECIMAL) -  CAST(`terimabarang` AS DECIMAL)) as `selisih`' ), 'manifest.*', 'manifest.id as man_id', 'kendaraan.*', 'pengemudi.*')
+					->join('kendaraan', 'kendaraan.id','manifest.kendaraan_id')
+					->join('pengemudi','pengemudi.id','manifest.pengemudi_id')
+					->where('lokasi_id','=', (int)$this->generate_number_lokasi() )
+					->havingRaw('`selisih` IS NULL OR `selisih` > 0 ', [''])
+					->orderByRaw('tanggal_berangkat ASC')->get();
+
+			$data['chart'] = $resi;
+			$data['register'] = $register;
+			// $data['array_sum'] = $array_sum;
+			// $data['array_banyak'] = $array_banyak;
+			
+			//Please use view method instead view method from laravel
+			return $this->view('terima/add',$data);
 		}
 
 
 		public function getinfo($id){
-
-
 			if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 			}
 
 			$data = [];
 			$data['page_title'] = 'Detail Data';
-			$data['row'] = DB::table('manifest')
-			->join('kendaraan','kendaraan.id','=','manifest.kendaraan_id')
-			->where('manifest.id',$id)->first();
+			$data['row'] = DB::table('manifest_terima')
+			->join('cms_users','cms_users.id','=','manifest_terima.checkby')
+			->where('manifest_terima.id',$id)->first();
 
-			$data['detail'] = DB::table('manifest_detail')
-			->join('manifest', 'manifest.id','=','manifest_detail.manifest_id')
-			->join('register_detail', 'register_detail.id','=','manifest_detail.register_detail_id')
+			$data['detail'] = DB::table('manifest_terimabarang')
+			->join('manifest', 'manifest.id','=','manifest_terimabarang.manifest_id')
+			->join('register_detail', 'register_detail.id','=','manifest_terimabarang.register_detail_id')
 			->join('register','register.id','=','register_detail.register_id')
 			->join('pelanggan','pelanggan.id','=','register.pelanggan_id')
 			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
-			// ->select('manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'penerima.*', 'penerima.nama as nama_penerima')
-			->select('manifest_detail.*', 'manifest_detail.qty as manifest_qty', 'manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'pelanggan.nama as nama_pengirim', 'penerima.*', 'penerima.nama as nama_penerima')
-			->where('manifest.id',$id)
+			->select('manifest_terimabarang.*', 'manifest_terimabarang.qty as manifest_qty', 'manifest_terimabarang.total as total_qty', 'manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'pelanggan.nama as nama_pengirim', 'penerima.*', 'penerima.nama as nama_penerima')
+			->where('manifest_terimabarang.manifest_terima_id',$id)
 			->get();
+
 
 			$data['id'] = $id;
 
-			return $this->view('manifest/info',$data);
+			return $this->view('terima/info',$data);
 		}
 
 
-		public function getDetail($id) {
+		public function getDetail($id){
 			if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
 				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
 			}
 
-			// if(Session::get('print_manifest')==""){
-			// 	return;
-			// }
-			  
 			$data = [];
 			$data['page_title'] = 'Detail Data';
-			$data['row'] = DB::table('manifest')
-			->join('kendaraan','kendaraan.id','=','manifest.kendaraan_id')
-			->where('manifest.id',$id)->first();
+			$data['row'] = DB::table('manifest_terima')
+			->join('cms_users','cms_users.id','=','manifest_terima.checkby')
+			->where('manifest_terima.id',$id)->first();
 
-			$data['detail'] = DB::table('manifest_detail')
-			->join('manifest', 'manifest.id','=','manifest_detail.manifest_id')
-			->join('register_detail', 'register_detail.id','=','manifest_detail.register_detail_id')
+			$data['detail'] = DB::table('manifest_terimabarang')
+			->join('manifest', 'manifest.id','=','manifest_terimabarang.manifest_id')
+			->join('register_detail', 'register_detail.id','=','manifest_terimabarang.register_detail_id')
 			->join('register','register.id','=','register_detail.register_id')
 			->join('pelanggan','pelanggan.id','=','register.pelanggan_id')
 			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
-			// ->select('manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'penerima.*', 'penerima.nama as nama_penerima')
-			->select('manifest_detail.*', 'manifest_detail.qty as manifest_qty', 'manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'pelanggan.nama as nama_pengirim', 'penerima.*', 'penerima.nama as nama_penerima')
-			->where('manifest.id',$id)
+			->select('manifest_terimabarang.*', 'manifest_terimabarang.qty as manifest_qty', 'manifest_terimabarang.total as total_qty', 'manifest.*', 'register_detail.*', 'register.*', 'pelanggan.*', 'pelanggan.nama as nama_pengirim', 'penerima.*', 'penerima.nama as nama_penerima')
+			->where('manifest_terimabarang.manifest_terima_id',$id)
 			->get();
 
 
-			$datatopdf = PDF::loadView('manifest/print', $data);
+			$data['id'] = $id;
 
-			$pdf = PDF::loadView('manifest/print', $data);
+			$datatopdf = PDF::loadView('terima/print', $data);
+
+			$pdf = PDF::loadView('terima/print', $data);
 
 			Session::forget('print_manifest');
     		// return $pdf->download('invoice.pdf');
 			return $pdf->stream();
 		}
+
+
 
 	}

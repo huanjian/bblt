@@ -225,5 +225,12 @@
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the
       user experience -->
+
+
+<script>
+/*$(document).bind("contextmenu",function(e){
+        return false;
+});*/
+</script>
 </body>
 </html>

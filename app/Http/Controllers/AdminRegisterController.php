@@ -4,6 +4,7 @@
 	use Request;
 	use DB;
 	use CRUDBooster;
+	use Barryvdh\DomPDF\Facade as PDF;
 
 	class AdminRegisterController extends \crocodicstudio\crudbooster\controllers\CBController {
 
@@ -31,8 +32,8 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Tanggal","name"=>"tanggal"];
 			$this->col[] = ["label"=>"Nomor Resi","name"=>"resi"];
+			$this->col[] = ["label"=>"Tanggal","name"=>"tanggal"];
 			$this->col[] = ["label"=>"Pengirim","name"=>"pelanggan_id","join"=>"pelanggan,nama"];
 			$this->col[] = ["label"=>"Penerima","name"=>"penerima_id","join"=>"pelanggan,nama"];
 			$this->col[] = ["label"=>"Keterangan","name"=>"keterangan"];
@@ -230,13 +231,28 @@
 					_token = retString;
 				}
 
+				function callWindow(print_id){
+					let wi = screen.width/2;
+					let he = screen.height/2;
+					let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+					width=600,height=600,left=540,top=0`;
+					
+					open('/admin/register/detail/'+print_id, 'test', params);
+
+				}
+				
+				var _print = '".Session::get('print_register')."';
+
+				if(_print != ''){
+					callWindow(_print);
+				}
+
 
 				function readString(){
 					$.ajax({
 						url: '/api/get-token',
 						type: 'POST',
 						success: function(msg) {
-							console.log(msg['data']['access_token']);
 							ajaxCallBack(msg['data']['access_token']);
 						},
 						data: {
@@ -249,8 +265,6 @@
 					
 					});
 				};readString();
-
-				console.log(_token);
 
 
 
@@ -456,6 +470,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
+			
 	            
 	    }
 
@@ -467,6 +482,16 @@
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
+
+			if($column_index==0){
+				$cel_rm = str_replace("<input type='checkbox' class='checkbox' name='checkbox[]' value='",'', $column_value);
+				$cel_rm = str_replace("'/>",'',$cel_rm);
+				$this->selected_pk = $cel_rm;
+			}
+
+			if($column_index==1){
+				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/register/info/'.$this->selected_pk.'">'.$column_value.'</a>';
+			}
 	    }
 
 	    /*
@@ -478,7 +503,55 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
+			// print_r($_POST);
+			// print("____________");
+			// print_r($postdata);
+			// print("+++++++++++++++++");
+			// print_r($_POST['registerdetail-total']);
+
+
+			$total_harga = 0;
+			$pelanggan_id = $_POST['pelanggan_id'];
+			$penerima_id = $_POST['penerima_id'];
+
+			if(isset($_POST['registerdetail-total'])){
+
+				foreach($_POST['registerdetail-total'] as $harga){
+					$total_harga = $total_harga + $harga;
+				}
+
+			}
+
+			if (isset($_POST['button_pengirim'])){
+
+				DB::table('pembayaran')->insert([
+					'tipe' => 'pengirim',
+					'total' => $total_harga,
+					'pelanggan_id' => $pelanggan_id,
+					'register_id' => 0
+				]);
+
+			}else if (isset($_POST['button_tunai'])){
+
+				DB::table('pembayaran')->insert([
+					'tipe' => 'tunai',
+					'total' => $total_harga,
+					'pelanggan_id' => 0,
+					'register_id' => 0
+				]);
+
+			}else if (isset($_POST['button_penerima'])){
+
+				DB::table('pembayaran')->insert([
+					'tipe' => 'penerima',
+					'total' => $total_harga,
+					'pelanggan_id' => $penerima_id,
+					'register_id' => 0
+				]);
+
+			}
 			
+			// exit();
 
 			$bulan = date("m"); 
 			$tahun = date("y"); 
@@ -487,10 +560,12 @@
 			$kode_urut = $this->generate_urutan_berdasarkan_lokasi_resi();
 
 
-
+			$pelanggan_lokasi_id = DB::table('pelanggan')->where('id',$postdata['penerima_id'])->pluck('lokasi_id')->first();
 
 			$postdata['resi'] = "RS".$kode_tempat."-".$tahun.$bulan.$kode_urut;
 			$postdata['tanggal'] = date('Y-m-d');
+			$postdata['pelanggan_lokasi_id'] = $pelanggan_lokasi_id;
+
 			// $postdata['pelanggan_id'] = $postdata['pelanggan_id'];
 			// $postdata['alamat_pengirim'] = $postdata['alamat'];
 			// $postdata['keterangan'] = "keterangan";
@@ -509,6 +584,17 @@
 	    */
 	    public function hook_after_add($id) {        
 	        //Your code here
+			$register_detail = DB::table('register_detail')->where('register_id',$id)->get();
+
+			foreach($register_detail as $detail){
+				DB::table('register_detail')->where('id', $detail->id)->update(['sisa_manifest' => $detail->banyak]);
+			}
+
+
+			$bayar = DB::table('pembayaran')->orderBy('id','desc')->first();
+			DB::table('pembayaran')->where('id', $bayar->id)->update(['register_id' => $id]);
+
+			Session::put('print_register',$id);
 
 	    }
 
@@ -589,11 +675,11 @@
 
 			$jumlahRegisterLokasi = (int)count($jumlahRegisterLokasi);
 
-			if( $jumlahRegisterLokasi<= 99999){
+			if( $jumlahRegisterLokasi<= 999999){
 
 				$urutan = $jumlahRegisterLokasi+1;
 
-				$kode = str_pad($urutan, 5, "0", STR_PAD_LEFT);
+				$kode = str_pad($urutan, 6, "0", STR_PAD_LEFT);
 
 
 			}else{
@@ -609,7 +695,85 @@
 
 		public function getinfo($id){
 
-			return Response::json("hlll");
+
+			if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+			}
+
+			// if(Session::get('print_register')==""){
+			// 	return;
+			// }
+			  
+			$data = [];
+			$data['page_title'] = 'Detail Data';
+			$data['row'] = DB::table('register')
+			->join('pelanggan as pengirim','pengirim.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->select('register.*', 'penerima.*', 'pengirim.*', 'pengirim.nama as nama_pengirim', 'pengirim.kd_pelanggan as kd_pengirim', 'penerima.nama as nama_penerima', 'penerima.kd_pelanggan as kd_penerima')
+			->where('register.id',$id)->first();
+
+
+
+			$data['detail'] = DB::table('register_detail')
+			->join('register','register.id','=','register_detail.register_id')
+			->join('pelanggan','pelanggan.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->join('satuan', 'satuan.id','=','register_detail.satuan_id')
+			->select('register_detail.*', 'register.*', 'pelanggan.*', 'penerima.*', 'penerima.nama as nama_penerima', 'satuan.*')
+			->where('register.id',$id)
+			->get();
+
+			$data['id'] = $id;
+
+			return $this->view('register/info',$data);
+		}
+
+
+		public function getDetail($id) {
+			if(!CRUDBooster::isRead() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
+				CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+			}
+
+			// if(Session::get('print_register')==""){
+			// 	return;
+			// }
+			  
+			$data = [];
+			$data['page_title'] = 'Detail Data';
+			$data['row'] = DB::table('register')
+			->join('pelanggan as pengirim','pengirim.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->select('register.*', 'penerima.*', 'pengirim.*', 'pengirim.nama as nama_pengirim', 'pengirim.kd_pelanggan as kd_pengirim', 'penerima.nama as nama_penerima', 'penerima.kd_pelanggan as kd_penerima')
+			->where('register.id',$id)->first();
+
+
+
+			$data['detail'] = DB::table('register_detail')
+			->join('register','register.id','=','register_detail.register_id')
+			->join('pelanggan','pelanggan.id','=','register.pelanggan_id')
+			->join('pelanggan as penerima', 'penerima.id','=','register.penerima_id')
+			->join('satuan', 'satuan.id','=','register_detail.satuan_id')
+			->select('register_detail.*', 'register.*', 'pelanggan.*', 'penerima.*', 'penerima.nama as nama_penerima', 'satuan.*')
+			->where('register.id',$id)
+			->get();
+
+
+			$datatopdf = PDF::loadView('register/print', $data);
+
+			$pdf = PDF::loadView('register/print', $data);
+
+			Session::forget('print_register');
+    		// return $pdf->download('invoice.pdf');
+			return $pdf->stream();
+		}
+
+
+
+		public function getAdd() {
+			$data = [];
+			$data['page_title'] = 'Detail Data';
+
+			return $this->view('register/add',$data);
 		}
 
 

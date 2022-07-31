@@ -5,16 +5,16 @@
 	use DB;
 	use CRUDBooster;
 
-	class AdminSatuanController extends \crocodicstudio\crudbooster\controllers\CBController {
+	class AdminRuteController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
 			# START CONFIGURATION DO NOT REMOVE THIS LINE
-			$this->title_field = "label_produk";
+			$this->title_field = "id";
 			$this->limit = "20";
 			$this->orderby = "id,desc";
 			$this->global_privilege = false;
-			$this->button_table_action = false;
+			$this->button_table_action = true;
 			$this->button_bulk_action = true;
 			$this->button_action_style = "button_icon";
 			$this->button_add = true;
@@ -25,32 +25,25 @@
 			$this->button_filter = true;
 			$this->button_import = false;
 			$this->button_export = false;
-			$this->table = "satuan";
+			$this->table = "rute";
 			# END CONFIGURATION DO NOT REMOVE THIS LINE
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
-			$this->col[] = ["label"=>"Pelanggan","name"=>"pelanggan_id","join"=>"pelanggan,nama"];
-			$this->col[] = ["label"=>"Produk","name"=>"produk"];
-			$this->col[] = ["label"=>"Harga","name"=>"label_harga"];
-			$this->col[] = ["label"=>"Kode","name"=>"kd_harga"];
+			$this->col[] = ["label"=>"Asal","name"=>"asal_id","join"=>"lokasi,nama_lokasi"];
+			$this->col[] = ["label"=>"Tujuan","name"=>"tujuan_id","join"=>"lokasi,nama_lokasi"];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
 			$this->form = [];
-			$this->form[] = ['label'=>'Pelanggan','name'=>'pelanggan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'pelanggan,nama','datatable_where'=>'lokasi_id = '.(int)$this->generate_number_lokasi()];
-			$this->form[] = ['label'=>'Produk','name'=>'produk','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-4'];
-			$this->form[] = ['label'=>'Tipe','name'=>'tipe','type'=>'select','validation'=>'required|min:1|max:255','width'=>'col-sm-2','dataenum'=>'kg;kubik;koli'];
-			$this->form[] = ['label'=>'Harga','name'=>'harga','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-3'];
+			$this->form[] = ['label'=>'Asal','name'=>'asal_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'lokasi,nama_lokasi'];
+			$this->form[] = ['label'=>'Tujuan','name'=>'tujuan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'lokasi,nama_lokasi'];
 			# END FORM DO NOT REMOVE THIS LINE
 
 			# OLD START FORM
 			//$this->form = [];
-			//$this->form[] = ['label'=>'Pelanggan','name'=>'pelanggan_id','type'=>'select2','validation'=>'required|integer|min:0','width'=>'col-sm-3','datatable'=>'pelanggan,nama'];
-			//$this->form[] = ['label'=>'Produk','name'=>'produk','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-4'];
-			//$this->form[] = ['label'=>'Harga Per KG','name'=>'kilo','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			//$this->form[] = ['label'=>'Harga Per Koli','name'=>'koli','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
-			//$this->form[] = ['label'=>'Harga Per Kubik','name'=>'kubik','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-2'];
+			//$this->form[] = ["label"=>"Asal Id","name"=>"asal_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"asal,id"];
+			//$this->form[] = ["label"=>"Tujuan Id","name"=>"tujuan_id","type"=>"select2","required"=>TRUE,"validation"=>"required|integer|min:0","datatable"=>"tujuan,id"];
 			# OLD END FORM
 
 			/* 
@@ -229,7 +222,7 @@
 	    }
 
 
-	    /*												
+	    /*
 	    | ---------------------------------------------------------------------- 
 	    | Hook for manipulate query of index result 
 	    | ---------------------------------------------------------------------- 
@@ -238,7 +231,7 @@
 	    */
 	    public function hook_query_index(&$query) {
 	        //Your code here
-
+	            
 	    }
 
 	    /*
@@ -249,18 +242,6 @@
 	    */    
 	    public function hook_row_index($column_index,&$column_value) {	        
 	    	//Your code here
-
-			if($column_index==0){
-				$cel_rm = str_replace("<input type='checkbox' class='checkbox' name='checkbox[]' value='",'', $column_value);
-				$cel_rm = str_replace("'/>",'',$cel_rm);
-				$this->selected_pk = $cel_rm;
-			}
-
-			if($column_index==1){
-				// print($cel_rm)."--->";
-				$column_value = '<a href="'.url(config('crudbooster.ADMIN_PATH')).'/satuan/edit/'.$this->selected_pk.'">'.$column_value.'</a>';
-			}
-
 	    }
 
 	    /*
@@ -272,17 +253,7 @@
 	    */
 	    public function hook_before_add(&$postdata) {        
 	        //Your code here
-			$name = DB::table('pelanggan')->where('id', $postdata['pelanggan_id'])->value('nama');
-			$postdata['label_produk'] = $name." ".$postdata['produk'];
-			$postdata['label_harga'] = $postdata['harga']." / ".$postdata['tipe'];
 
-
-			$kode_tempat = $this->generate_number_lokasi();
-			$kode_urut = $this->generate_urutan_berdasarkan_lokasi_satuan();
-
-
-			$postdata['kd_harga'] = "K".$kode_tempat."-".$kode_urut;
-			return $postdata;
 	    }
 
 	    /* 
@@ -307,10 +278,7 @@
 	    */
 	    public function hook_before_edit(&$postdata,$id) {        
 	        //Your code here
-			$name = DB::table('pelanggan')->where('id', $postdata['pelanggan_id'])->value('nama');
-			$postdata['label_produk'] = $name." ".$postdata['produk'];
-			$postdata['label_harga'] = $postdata['harga']." / ".$postdata['tipe'];
-			return $postdata;
+
 	    }
 
 	    /* 
@@ -352,47 +320,6 @@
 
 
 	    //By the way, you can still create your own method in here... :) 
-
-		public function generate_number_lokasi(){
-
-			$role_tempat = "";
-			if (strpos(strtolower(CRUDBooster::myPrivilegeName()), 'admin') !== false) {
-				$role_tempat = '01';
-			}else{
-				$role_tempat = strtolower(CRUDBooster::myPrivilegeName());
-			}
-
-			return $role_tempat;
-
-		}
-
-
-		public function generate_urutan_berdasarkan_lokasi_satuan(){
-
-			$kode = "";
-			$kode_lokasi = $this->generate_number_lokasi();
-			$kode_lokasi = "K".$kode_lokasi;
-
-			$jumlahRegisterLokasi = DB::table('satuan')->where('kd_harga', 'like', '%'.$kode_lokasi.'%' )->get();
-
-			$jumlahRegisterLokasi = (int)count($jumlahRegisterLokasi);
-
-			if( $jumlahRegisterLokasi<= 999999){
-
-				$urutan = $jumlahRegisterLokasi+1;
-
-				$kode = str_pad($urutan, 6, "0", STR_PAD_LEFT);
-
-
-			}else{
-
-				$urutan = $jumlahRegisterLokasi+1;
-
-				$kode = $urutan;
-			}
-
-			return $kode;
-		}
 
 
 	}

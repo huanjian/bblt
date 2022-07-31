@@ -1,0 +1,32 @@
+create view v_available as 
+select (sisa_manifest - temporary) as sisa_chart, 
+manifest_chart.session, 
+manifest_chart.register_detail_id, 
+manifest_chart.temporary, 
+manifest_chart.created, 
+register_detail.produk, 
+register_detail.keterangan, 
+register_detail.satuan_id, 
+register_detail.banyak, 
+register_detail.berat, 
+register_detail.kubik, 
+register_detail.harga, 
+register_detail.total, 
+register_detail.register_id, 
+register_detail.qty_manifest, 
+register_detail.sisa_manifest, 
+register_detail.id as reg_detail_id, 
+register.id as reg_id, 
+register.resi, 
+register.tanggal as reg_tanggal, 
+register.pelanggan_id, 
+register.pelanggan_lokasi_id, 
+register.alamat_pengirim, 
+register.keterangan as reg_keterangan, 
+register.penerima_id, 
+register.alamat_tujuan 
+
+from `register` 
+left join `register_detail` on `register_detail`.`register_id` = `register`.`id` 
+left join `manifest_chart` on `manifest_chart`.`register_detail_id` = `register_detail`.`id` 
+group by `register_detail_id` order by tanggal ASC

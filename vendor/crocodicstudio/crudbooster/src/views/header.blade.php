@@ -82,15 +82,16 @@
               <ul class="dropdown-menu">
               <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/lokasi'}}">Lokasi</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/cabang'}}">Cabang / Unit</a></li>
+                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/rute'}}">Rute</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/pelanggan'}}">Pelanggan</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/kendaraan'}}">Kendaraan</a></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/satuan'}}">Tabel Harga</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/register/add'}}">Register</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/manifest'}}">Manifest</a></li>
+                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/manifest/add'}}">Manifest</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="#">Terima Kiriman</a></li>
+                <li><a href="{{url(config('crudbooster.ADMIN_PATH')).'/manifest_terima/add'}}">Terima Kiriman</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="#">Delivery Barang</a></li>
                 <li role="separator" class="divider"></li>
